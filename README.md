@@ -1,1 +1,1 @@
-# tln-golang
+# MVTs - Minimal viable templates: Golang
