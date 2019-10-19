@@ -13,8 +13,9 @@ sonar.projectVersion=${COMPONENT_VERSION}
 
 sonar.sourceEncoding=UTF-8
 
-sonar.sources=cmd,pkg
-sonar.tests=cmd,pkg
+sonar.sources=service.go
+#sonar.sources=cmd,pkg
+#sonar.tests=cmd,pkg
 sonar.sourceEncoding=UTF-8
 
 sonar.exclusions=**/*_test.go,**/vendor/**
