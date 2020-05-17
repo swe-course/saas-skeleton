@@ -23,7 +23,7 @@ properties([
 
 node {
   //
-  def helper = new buildHelper(this, /*TLN_*/SONARQUBE_ACCESS_TOKEN, /*TLN_*/GITHUB_ACCESS_TOKEN)
+  def helper = new buildHelper(this, TLN_SONARQUBE_ACCESS_TOKEN, TLN_GITHUB_ACCESS_TOKEN)
   //
   stage('Checkout') {
     //
@@ -50,11 +50,11 @@ node {
     }
 
     stage('Build') {
-      //sh 'tln prereq:init:build'
+      sh 'tln prereq:init:build --shared-dest /tmp/tln'
     }
 
     stage('Unit tests') {
-      //sh 'tln test'
+      sh 'tln test --shared-dest /tmp/tln'
     }
 
     stage('SonarQube analysis') {
