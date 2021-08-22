@@ -33,6 +33,7 @@ node {
     //
     // Create config for detached build
     sh "echo '{\"detach\": true}' > '.tlnrc'"
+    sh "tln --version"
 
     //
     // Get information from project's config
