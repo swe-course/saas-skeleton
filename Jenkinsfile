@@ -65,7 +65,7 @@ node {
     stage('Delivery') {
       if (helper.pullRequest){
       } else {
-        sh 'tln docker-build -e TLN_UID=${TLN_COMPONENT_UID} -e TLN_VERSION=${TLN_COMPONENT_VERSION} --dry-run'
+        sh 'tln docker-build -e TLN_UID=${TLN_COMPONENT_UID} -e TLN_VERSION=${TLN_COMPONENT_VERSION}'
       }
     }
 
