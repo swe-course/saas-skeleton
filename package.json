@@ -1,6 +1,6 @@
 {
   "name": "sh.tln.react",
-  "version": "21.3.1",
+  "version": "21.8.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.8.0",
@@ -12,7 +12,7 @@
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.4.0"
+    "react-scripts": "^4.0.3"
   },
   "scripts": {
     "start": "cross-env PORT=9080 react-scripts start",
