@@ -1,5 +1,6 @@
 node {
   //
+  def scmVars
   def pullRequest = false
   def commitSha
   def buildBranch
@@ -7,12 +8,11 @@ node {
   //
   stage('Checkout') {
     //
-    def scmVars = checkout scm
+    scmVars = checkout scm
     //
     // Create config for detached build
     sh "echo '{\"detach\": true}' > '.tlnrc'"
     //
-    
   }
 
   try {
