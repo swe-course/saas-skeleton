@@ -1,15 +1,38 @@
 node {
   //
+  def pullRequest = false
+  def commitSha
+  def buildBranch
+  def pullId
+  def commitSha
+  //
   stage('Checkout') {
     //
     def scmVars = checkout scm
     //
     // Create config for detached build
     sh "echo '{\"detach\": true}' > '.tlnrc'"
+    //
+    
   }
 
   try {
-
+    //
+    commitSha = this.scmVars.GIT_COMMIT
+    buildBranch = this.scmVars.GIT_BRANCH
+    if (buildBranch.contains('PR-')) {
+      // multibranch PR build
+      pullRequest = true
+      pullId = env.CHANGE_ID
+    } else if (params.containsKey('sha1')){
+      // standard PR build
+      pullRequest = true
+      pullId = params.ghprbPullId
+      commitSha = params.ghprbActualCommit
+    } else {
+      // PUSH build
+    }
+    
     stage('Setup build environment') {
       sh '''
 tln install web/portal --depends
