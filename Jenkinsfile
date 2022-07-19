@@ -45,7 +45,7 @@ node {
     println(sh(script:'env', returnStdout: true))    
     //
     if (pullRequest) {
-      def script = "git diff ${targetBranch}"
+      def script = "git diff --name-only ${targetBranch}"
       //changes = sh(script:"git diff --name-only HEAD ${targetBranch} | awk -v FS='/' '{print $2}' | sort -u | tr '\n' ' '", returnStdout: true)
     }
     println('Changes')
