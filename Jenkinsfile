@@ -17,8 +17,8 @@ node {
 
   try {
     //
-    commitSha = this.scmVars.GIT_COMMIT
-    buildBranch = this.scmVars.GIT_BRANCH
+    commitSha = scmVars.GIT_COMMIT
+    buildBranch = scmVars.GIT_BRANCH
     if (buildBranch.contains('PR-')) {
       // multibranch PR build
       pullRequest = true
