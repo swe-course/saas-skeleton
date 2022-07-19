@@ -36,6 +36,10 @@ node {
     println(scmVars)
     println('Job input parameters')
     println(params)
+    println('Build info')
+    println("[PR:${pullRequest}] [BRANCH:${buildBranch}] [COMMIT: ${commitSha}] [PULL ID: ${pullId}]")
+    println('Environment variables')
+    println(sh(script:'env', returnStdout: true))    
     //
     
     stage('Setup build environment') {
