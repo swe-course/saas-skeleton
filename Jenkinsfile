@@ -4,7 +4,6 @@ node {
   def commitSha
   def buildBranch
   def pullId
-  def commitSha
   //
   stage('Checkout') {
     //
