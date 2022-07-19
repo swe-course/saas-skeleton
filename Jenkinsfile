@@ -5,6 +5,7 @@ node {
   def commitSha
   def buildBranch
   def pullId
+  def targetBranch
   //
   stage('Checkout') {
     //
@@ -28,6 +29,7 @@ node {
       pullRequest = true
       pullId = params.ghprbPullId
       commitSha = params.ghprbActualCommit
+      targetBranch = params.ghprbTargetBranch
     } else {
       // PUSH build
     }
@@ -37,7 +39,7 @@ node {
     println('Job input parameters')
     println(params)
     println('Build info')
-    println("[PR:${pullRequest}] [BRANCH:${buildBranch}] [COMMIT: ${commitSha}] [PULL ID: ${pullId}]")
+    println("[PR:${pullRequest}] [BRANCH:${buildBranch}] [COMMIT: ${commitSha}] [PULL ID: ${pullId}] [TARGET BRANCH: ${targetBranch}]")
     println('Environment variables')
     println(sh(script:'env', returnStdout: true))    
     //
