@@ -6,6 +6,7 @@ node {
   def buildBranch
   def pullId
   def targetBranch
+  def changes
   //
   stage('Checkout') {
     //
@@ -43,6 +44,11 @@ node {
     println('Environment variables')
     println(sh(script:'env', returnStdout: true))    
     //
+    changes = sh(script:"git diff --name-only HEAD ${targetBranch} | awk -v FS='/' '{print $2}' | sort -u | tr '\n' ' '", returnStdout: true)
+    println('Changes')
+    println(changes)    
+    
+    
     
     stage('Setup build environment') {
       sh '''
