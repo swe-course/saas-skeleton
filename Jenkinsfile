@@ -31,6 +31,12 @@ node {
     } else {
       // PUSH build
     }
+    //
+    println('SCM variables')
+    println(scmVars)
+    println('Job input parameters')
+    println(params)
+    //
     
     stage('Setup build environment') {
       sh '''
