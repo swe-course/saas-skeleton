@@ -28,7 +28,7 @@ node {
     } else if (params.containsKey('sha1')){
       // standard PR build
       pullRequest = true
-      buildBranch = params.ghprbSourceBranch
+      buildBranch = params.GIT_BRANCH
       pullId = params.ghprbPullId
       commitSha = params.ghprbActualCommit
       targetBranch = params.ghprbTargetBranch
