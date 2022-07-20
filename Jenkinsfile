@@ -63,7 +63,7 @@ tln install services/auth --depends
     stage('Build web/portal') {
       if (changes.contains('web/portal')) {
         sh '''
-tln initL:build:test web/portal
+tln init:build:test web/portal
         '''
       }
     }
