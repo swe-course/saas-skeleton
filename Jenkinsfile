@@ -61,14 +61,14 @@ tln install services/auth --depends
     }
 
     stage('Build web/portal') {
-      if (changes.contains('web/portal')) {
+      if (changes.contains('web/portal') || !pullRequest) {
         sh '''
 tln init:build:test web/portal
         '''
       }
     }
     stage('Build services/auth') {
-      if (changes.contains('ervices/auth')) {
+      if (changes.contains('ervices/auth') || !pullRequest) {
         sh '''
 tln build:test services/auth
         '''
