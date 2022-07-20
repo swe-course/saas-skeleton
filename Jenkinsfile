@@ -60,31 +60,36 @@ tln install services/auth --depends
       '''
     }
 
-    stage('Build') {
+    stage('Build web/portal') {
+      if (changes.contains('web/portal')) {
+        sh '''
+tln initL:build:test web/portal
+        '''
+      }
     }
-
-    stage('Unit tests') {
+    stage('Build ervices/auth') {
+      if (changes.contains('ervices/auth')) {
+        sh '''
+tln initL:build:test ervices/auth
+        '''
+      }
     }
 
     stage('SonarQube analysis') {
     }
 
     stage('Delivery') {
-      /*
-      if (pull request){
+      if (pullRequest){
       } else {
         // create docker, push artifacts to the Harbor/Nexus/etc.
         // archiveArtifacts artifacts: 'path/2/artifact'
       }
-      */
     }
 
     stage('Deploy') {
-      /*
-      if (helper.pullRequest){
+      if (pullRequest){
       } else {
       }
-      */
     }
   } catch (e) {
     def traceStack = e.toString()
