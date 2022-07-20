@@ -47,7 +47,7 @@ node {
     //
     if (pullRequest) {
       def script = 
-      changes = sh(script:"git diff --name-only HEAD origin/${buildBranch}", returnStdout: true)
+        changes = sh(script:"git diff --name-only HEAD ${buildBranch}", returnStdout: true)
     }
     println('Changes')
     println(changes)
