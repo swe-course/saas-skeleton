@@ -67,10 +67,10 @@ tln init:build:test web/portal
         '''
       }
     }
-    stage('Build ervices/auth') {
+    stage('Build services/auth') {
       if (changes.contains('ervices/auth')) {
         sh '''
-tln initL:build:test services/auth
+tln init:build:test services/auth
         '''
       }
     }
