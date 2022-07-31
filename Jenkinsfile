@@ -3,7 +3,7 @@ node {
   def scmVars
   def pullRequest = false
   def commitSha
-  def buildBranch
+  def sourcedBranch
   def pullId
   def targetBranch
   def changes = ''
@@ -20,15 +20,15 @@ node {
   try {
     //
     commitSha = scmVars.GIT_COMMIT
-    buildBranch = scmVars.GIT_BRANCH
-    if (buildBranch.contains('PR-')) {
+    sourcedBranch = scmVars.GIT_BRANCH
+    if (sourcedBranch.contains('PR-')) {
       // multibranch PR build
       pullRequest = true
       pullId = env.CHANGE_ID
     } else if (params.containsKey('sha1')){
       // standard PR build
       pullRequest = true
-      buildBranch = params.GIT_BRANCH
+      sourcedBranch = params.GIT_BRANCH
       pullId = params.ghprbPullId
       commitSha = params.ghprbActualCommit
       targetBranch = params.ghprbTargetBranch
@@ -41,13 +41,12 @@ node {
     println('Job input parameters')
     println(params)
     println('Build info')
-    println("[PR:${pullRequest}] [BRANCH:${buildBranch}] [COMMIT: ${commitSha}] [PULL ID: ${pullId}] [TARGET BRANCH: ${targetBranch}]")
+    println("[PR:${pullRequest}] [SOURCE BRANCH:${sourcedBranch}] [COMMIT: ${commitSha}] [PULL ID: ${pullId}] [TARGET BRANCH: ${targetBranch}]")
     println('Environment variables')
     println(sh(script:'env', returnStdout: true))    
     //
     if (pullRequest) {
-      def script = 
-        changes = sh(script:"git diff --name-only HEAD origin/${buildBranch}", returnStdout: true)
+      changes = sh(script:"git diff --name-only HEAD origin/${targetBranch}", returnStdout: true)
     }
     println('Changes')
     println(changes)
