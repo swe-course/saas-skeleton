@@ -1,1 +1,1 @@
-[{"prefix":"web/portal","subtree":"git@github.com:project-talan/tln-react.git","ref":"v22.1.0"},{"prefix":"services/auth","subtree":"git@github.com:project-talan/tln-golang.git","ref":"v22.7.0"}]
+[{"prefix":"web/portal","subtree":"git@github.com:project-talan/tln-react.git","ref":"v22.1.0"},{"prefix":"services/auth","subtree":"git@github.com:project-talan/tln-golang.git","ref":"v22.7.0"},{"prefix":"ii","subtree":"git@github.com:project-talan/tln-clouds.git","ref":"v22.8.0"}]
