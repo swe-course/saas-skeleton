@@ -104,11 +104,11 @@ jobs:
     name: Deploy, Validate & Verify
     if: ${{ github.event.inputs.construct == 'true' || github.event.inputs.deploy == 'true' || github.event.inputs.e2e != 'skip' || github.event.inputs.undeploy == 'true' || github.event.inputs.deconstruct == 'true' }}
     runs-on: ubuntu-latest
-    environment:
+    env:
       TF_VAR_project_name: project1
       TF_VAR_ii_name: dev
-      TF_VAR_env_name: {{ github.event.inputs.environment }}
-      TF_VAR_tenant_name: penramco
+      TF_VAR_env_name: ${{ github.event.inputs.environment }}
+      TF_VAR_tenant_name: petramco
 
       DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
@@ -117,7 +117,7 @@ jobs:
       TF_VAR_do_k8s_nodes_min: 1
       TF_VAR_do_k8s_nodes_max: 1
       TF_VAR_do_k8s_nodes_size: s-2vcpu-2gb
-
+      
     steps:
       - uses: actions/checkout@v3
         with:
@@ -130,7 +130,7 @@ jobs:
           npm i -g tln-cli@1.61.0
           echo '{"detach": true}' > '.tlnrc'
           tln --version
-        run: tln install ii/do --depends
+          tln install ii/do --depends
       - name: Construct Infrastructure
         if: ${{ github.event.inputs.construct == 'true' }}
         run: tln construct-infr
