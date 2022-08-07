@@ -6,6 +6,57 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
+    inputs:
+      build:
+        description: 'Build'
+        required: true
+        type: boolean
+        default: true
+      test:
+        description: 'Unit Tests'
+        required: true
+        type: boolean
+        default: true
+      analysis:
+        description: 'Static Code Analisys'
+        required: true
+        type: boolean
+        default: true
+      package:
+        description: 'Package & Upload'
+        required: true
+        type: boolean
+        default: false
+      construct:
+        description: 'Construct Infractucture'
+        required: true
+        type: boolean
+        default: false
+      deploy:
+        description: 'Deploy'
+        required: true
+        type: boolean
+        default: false
+      e2e:
+        description: 'e2e Tests'
+        required: true
+        default: 'skip'
+        type: choice
+        options:
+        - skip
+        - smoke
+        - api
+        - full
+      undeploy:
+        description: 'undeploy'
+        required: true
+        type: boolean
+        default: false
+      deconstruct:
+        description: 'Deconstruct Infractucture'
+        required: true
+        type: boolean
+        default: false
     
 jobs:
   sonarcloud:
