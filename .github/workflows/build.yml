@@ -59,15 +59,62 @@ on:
         default: false
     
 jobs:
-  sonarcloud:
-    name: Static Code Analisys
+  build:
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install tln cli
+        run: |
+          npm i -g tln-cli@1.61.0
+          echo '{"detach": true}' > '.tlnrc'
+          tln --version
+      - name: Build
+        run: |
+          tln build
+      - name: Test
+        run: |
+          tln test
+      - name: Static Code Analysis (SonarCloud)
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Package
+        run: |
+          tln package
+  deploy:
+    needs: build
+    name: Deploy, Validate & Verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install tln cli
+        run: |
+          npm i -g tln-cli@1.61.0
+          tln --version    
+      - name: Construct Infrastructure
+        run: |
+          tln construct
+      - name: Deploy
+        run: |
+          tln deploy
+      - name: e2e Tests
+        run: |
+          tln e2e
+      - name: Undeploy
+        run: |
+          tln undeploy
+      - name: Deconstruct Infrastructure
+        run: |
+          tln deconstruct
