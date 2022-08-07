@@ -99,7 +99,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Package
         if: ${{ github.event.inputs.package == 'true' }}
-        run: tln init-app:package-app
+        run: |
+          docker --version
+          tln package-app
   deploy:
     needs: build
     name: Deploy, Validate & Verify
