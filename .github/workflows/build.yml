@@ -104,7 +104,7 @@ jobs:
   deploy:
     needs: build
     name: Deploy, Validate & Verify
-    if: ${{ github.event.inputs.construct == 'true' || github.event.inputs.deploy == 'true' || github.event.inputs.e2 != 'skip' || github.event.inputs.undeploy == 'true' || github.event.inputs.deconstruct == 'true' }}
+    if: ${{ github.event.inputs.construct == 'true' || github.event.inputs.deploy == 'true' || github.event.inputs.e2e != 'skip' || github.event.inputs.undeploy == 'true' || github.event.inputs.deconstruct == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -124,7 +124,7 @@ jobs:
         if: ${{ github.event.inputs.deploy == 'true' }}
         run: tln deploy
       - name: e2e Tests
-        if: ${{ github.event.inputs.e2 != 'skip' }}
+        if: ${{ github.event.inputs.e2e != 'skip' }}
         run: tln e2e
       - name: Undeploy
         if: ${{ github.event.inputs.undeploy == 'true' }}
