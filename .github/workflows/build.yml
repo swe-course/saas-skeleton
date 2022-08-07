@@ -16,8 +16,6 @@ on:
         - ci
         - dev01
         - qa01
-        - uat01
-        - prod
       build:
         description: 'Build'
         required: true
@@ -88,10 +86,10 @@ jobs:
           tln --version
       - name: Build
         if: ${{ github.event.inputs.build == 'true' }}
-        run: tln build
+        run: tln init-app:build-app
       - name: Test
         if: ${{ github.event.inputs.test == 'true' }}
-        run: tln test
+        run: tln init-app:test-app
       - name: Static Code Analysis (SonarCloud)
         if: ${{ github.event.inputs.analysis == 'true' }}
         uses: SonarSource/sonarcloud-github-action@master
@@ -100,12 +98,26 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Package
         if: ${{ github.event.inputs.package == 'true' }}
-        run: tln package
+        run: tln init-app:package-app
   deploy:
     needs: build
     name: Deploy, Validate & Verify
     if: ${{ github.event.inputs.construct == 'true' || github.event.inputs.deploy == 'true' || github.event.inputs.e2e != 'skip' || github.event.inputs.undeploy == 'true' || github.event.inputs.deconstruct == 'true' }}
     runs-on: ubuntu-latest
+    environment:
+      TF_VAR_project_name: project1
+      TF_VAR_ii_name: dev
+      TF_VAR_env_name: {{ github.event.inputs.environment }}
+      TF_VAR_tenant_name: penramco
+
+      DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
+      TF_VAR_do_region: fra1
+      TF_VAR_do_k8s_version: 1.23.9-do.0
+      TF_VAR_do_k8s_nodes_min: 1
+      TF_VAR_do_k8s_nodes_max: 1
+      TF_VAR_do_k8s_nodes_size: s-2vcpu-2gb
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -116,19 +128,21 @@ jobs:
       - name: Install tln cli
         run: |
           npm i -g tln-cli@1.61.0
-          tln --version    
+          echo '{"detach": true}' > '.tlnrc'
+          tln --version
+        run: tln install ii/do --depends
       - name: Construct Infrastructure
         if: ${{ github.event.inputs.construct == 'true' }}
-        run: tln construct
+        run: tln construct-infr
       - name: Deploy
         if: ${{ github.event.inputs.deploy == 'true' }}
-        run: tln deploy
+        run: tln deploy-app
       - name: e2e Tests
         if: ${{ github.event.inputs.e2e != 'skip' }}
-        run: tln e2e
+        run: tln e2e-app
       - name: Undeploy
         if: ${{ github.event.inputs.undeploy == 'true' }}
-        run: tln undeploy
+        run: tln undeploy-app
       - name: Deconstruct Infrastructure
         if: ${{ github.event.inputs.deconstruct == 'true' }}
-        run: tln deconstruct
+        run: tln deconstruct-infr
