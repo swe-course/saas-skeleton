@@ -48,7 +48,7 @@ on:
         - api
         - full
       undeploy:
-        description: 'undeploy'
+        description: 'Undeploy'
         required: true
         type: boolean
         default: false
@@ -60,7 +60,7 @@ on:
     
 jobs:
   sonarcloud:
-    name: SonarCloud
+    name: Static Code Analisys
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
