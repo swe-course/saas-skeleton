@@ -103,7 +103,7 @@ jobs:
           docker --version
           echo "${{secrets.DOCKER_REGISTRY}}" > ~/.docker/config.json
           cat ~/.docker/config.json
-          #tln package-app
+          tln package-app
   deploy:
     needs: build
     name: Deploy, Validate & Verify
