@@ -72,7 +72,7 @@ on:
 jobs:
   build:
     name: Build & Test
-    if: ${{ github.event.inputs.build || github.event.inputs.test || github.event.inputs.analysis || github.event.inputs.package }}
+    if: ${{ github.event.inputs.build == 'true' || github.event.inputs.test == 'true' || github.event.inputs.analysis == 'true' || github.event.inputs.package == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -87,24 +87,24 @@ jobs:
           echo '{"detach": true}' > '.tlnrc'
           tln --version
       - name: Build
-        if: ${{ github.event.inputs.build }}
+        if: ${{ github.event.inputs.build == 'true' }}
         run: tln build
       - name: Test
-        if: ${{ github.event.inputs.test }}
+        if: ${{ github.event.inputs.test == 'true' }}
         run: tln test
       - name: Static Code Analysis (SonarCloud)
-        if: ${{ github.event.inputs.analysis }}
+        if: ${{ github.event.inputs.analysis == 'true' }}
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Package
-        if: ${{ github.event.inputs.package }}
+        if: ${{ github.event.inputs.package == 'true' }}
         run: tln package
   deploy:
     needs: build
     name: Deploy, Validate & Verify
-    if: ${{ github.event.inputs.construct || github.event.inputs.deploy || github.event.inputs.e2 != 'skip' || github.event.inputs.undeploy || github.event.inputs.deconstruct }}
+    if: ${{ github.event.inputs.construct == 'true' || github.event.inputs.deploy == 'true' || github.event.inputs.e2 != 'skip' || github.event.inputs.undeploy == 'true' || github.event.inputs.deconstruct == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -118,17 +118,17 @@ jobs:
           npm i -g tln-cli@1.61.0
           tln --version    
       - name: Construct Infrastructure
-        if: ${{ github.event.inputs.construct }}
+        if: ${{ github.event.inputs.construct == 'true' }}
         run: tln construct
       - name: Deploy
-        if: ${{ github.event.inputs.deploy }}
+        if: ${{ github.event.inputs.deploy == 'true' }}
         run: tln deploy
       - name: e2e Tests
         if: ${{ github.event.inputs.e2 != 'skip' }}
         run: tln e2e
       - name: Undeploy
-        if: ${{ github.event.inputs.undeploy }}
+        if: ${{ github.event.inputs.undeploy == 'true' }}
         run: tln undeploy
       - name: Deconstruct Infrastructure
-        if: ${{ github.event.inputs.deconstruct }}     
+        if: ${{ github.event.inputs.deconstruct == 'true' }}
         run: tln deconstruct
