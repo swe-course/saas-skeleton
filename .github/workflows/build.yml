@@ -72,6 +72,7 @@ on:
 jobs:
   build:
     name: Build & Test
+    if: ${{ github.event.inputs.build || github.event.inputs.test || github.event.inputs.analysis || github.event.inputs.package }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -86,22 +87,24 @@ jobs:
           echo '{"detach": true}' > '.tlnrc'
           tln --version
       - name: Build
-        run: |
-          tln build
+        if: ${{ github.event.inputs.build }}
+        run: tln build
       - name: Test
-        run: |
-          tln test
+        if: ${{ github.event.inputs.test }}
+        run: tln test
       - name: Static Code Analysis (SonarCloud)
+        if: ${{ github.event.inputs.analysis }}
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Package
-        run: |
-          tln package
+        if: ${{ github.event.inputs.package }}
+        run: tln package
   deploy:
     needs: build
     name: Deploy, Validate & Verify
+    if: ${{ github.event.inputs.construct || github.event.inputs.deploy || github.event.inputs.e2 != 'skip' || github.event.inputs.undeploy || github.event.inputs.deconstruct }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -115,17 +118,17 @@ jobs:
           npm i -g tln-cli@1.61.0
           tln --version    
       - name: Construct Infrastructure
-        run: |
-          tln construct
+        if: ${{ github.event.inputs.construct }}
+        run: tln construct
       - name: Deploy
-        run: |
-          tln deploy
+        if: ${{ github.event.inputs.deploy }}
+        run: tln deploy
       - name: e2e Tests
-        run: |
-          tln e2e
+        if: ${{ github.event.inputs.e2 != 'skip' }}
+        run: tln e2e
       - name: Undeploy
-        run: |
-          tln undeploy
+        if: ${{ github.event.inputs.undeploy }}
+        run: tln undeploy
       - name: Deconstruct Infrastructure
-        run: |
-          tln deconstruct
+        if: ${{ github.event.inputs.deconstruct }}     
+        run: tln deconstruct
