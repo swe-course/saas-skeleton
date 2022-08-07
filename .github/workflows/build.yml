@@ -135,7 +135,7 @@ jobs:
           npm i -g tln-cli@1.61.0
           echo '{"detach": true}' > '.tlnrc'
           tln --version
-          tln install ii/do --depends
+          tln install ii/do:app --depends
       - name: Construct Infrastructure
         if: ${{ github.event.inputs.construct == 'true' }}
         run: tln construct-infr

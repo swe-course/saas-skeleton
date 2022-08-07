@@ -1,0 +1,29 @@
+{{- range .Values.routes }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: imbybe-ingress-{{ .suffix }}
+  namespace: {{ $.Values.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # nginx.ingress.kubernetes.io/ssl-redirect: "{{ $.Values.sslRedirect }}"
+    #nginx.ingress.kubernetes.io/proxy-body-size: {{ $.Values.proxyBodySize }}
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .rewrite }}
+spec:
+  rules:
+  - http:
+      paths:
+        - path: {{ .path }}
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ .backend }}
+              port:
+                number: 80
+---
+{{- end }}
+
+
+
+

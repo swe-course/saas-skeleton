@@ -1,0 +1,30 @@
+{{- range $group, $params:= .Values.deployments }}
+  {{- range $inst, $val:= $params.instances }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $params.prefix }}-{{ $inst }}
+  namespace: {{ $.Values.namespace }}
+spec:
+  replicas: {{ $val.replicas }}
+  selector:
+    matchLabels:
+      component: {{ $params.prefix }}.{{ $inst }}
+  template:
+    metadata:
+      labels:
+        component: {{ $params.prefix }}.{{ $inst }}
+    spec:
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: docker-registry-secret
+      containers:
+      - name: {{ $inst }}
+        image: {{ $.Values.registry }}/{{ $.Values.reverseDomain }}.{{ $group }}.{{ $inst }}:{{ $.Values.projectVersion }}
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 80
+---
+{{- end }}
+  {{- end }}
