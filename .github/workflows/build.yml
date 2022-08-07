@@ -7,6 +7,17 @@ on:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
     inputs:
+      environment:
+        description: 'Environment'
+        required: true
+        default: 'ci'
+        type: choice
+        options:
+        - ci
+        - dev01
+        - qa01
+        - uat01
+        - prod
       build:
         description: 'Build'
         required: true
