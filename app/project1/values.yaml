@@ -1,0 +1,35 @@
+namespace: ""
+
+registry: ""
+
+domain: ""
+reverseDomain: ""
+projectVersion: ""
+
+tlsCertificate: ""
+tlsKey: ""
+dockerSecret: ""
+
+proxyBodySize: "1m"
+
+deployments:
+  web:
+    prefix: "web"
+    instances:
+      portal:
+        replicas: 2
+  services:
+    prefix: "services"
+    instances:
+      auth:
+        replicas: 2
+
+routes:
+  - suffix: "portal"
+    rewrite: "/$1"
+    backend: "web-portal"
+    path: "/(.*)"
+  - suffix: "auth"
+    rewrite: "/$2"
+    backend: "services-auth"
+    path: "/api(/|$)(.*)"
