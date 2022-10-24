@@ -55,8 +55,7 @@ node {
     
     stage('Setup build environment') {
       sh '''
-tln install web/portal --depends
-tln install services/auth --depends
+tln prereq-app
       '''
     }
 
